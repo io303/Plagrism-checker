@@ -1,73 +1,216 @@
-# Welcome to your Lovable project
+# AI Plagiarism Checker & Content Humanizer
 
-## Project info
+A full-stack web application that detects plagiarism in text, analyzes originality, and rewrites copied content into unique, human-like text. Built with React, TypeScript, Tailwind CSS.
 
-**URL**: https://lovable.dev/projects/bb6e3302-f60f-46f3-a147-f31f523ac7ed
+---
 
-## How can I edit this code?
+## Live Demo
 
-There are several ways of editing your application.
+[Plagrism Checker](https://plagrism-checker-theta.vercel.app/)
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/bb6e3302-f60f-46f3-a147-f31f523ac7ed) and start prompting.
+## Features
 
-Changes made via Lovable will be committed automatically to this repo.
+### Core Features
+- **Plagiarism Detection** — Paste or type text and get an instant plagiarism percentage.
+- **Detailed Match Report** — View matched sources, similarity percentages, and highlighted text.
+- **Document Upload** — Upload PDF, DOCX, or TXT files and extract text automatically.
+- **Text Humanization** — Rewrite plagiarized content into original text using AI.
+- **Check History** — View and reload previous plagiarism checks.
+- **Comparison View** — Compare original text against matched sources side-by-side.
+- **Downloadable Report** — Export plagiarism reports as a text file.
 
-**Use your preferred IDE**
+### Additional Features
+- Responsive and modern UI with smooth animations
+- Real-time character count and validation
+- Adjustable originality level for humanization
+- Color-coded results (green / yellow / red)
+- Loading states and error handling
+- Secure backend with row-level security
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Tech Stack
 
-Follow these steps:
+### Frontend
+- **React 18** — UI library
+- **TypeScript** — Type-safe JavaScript
+- **Vite** — Fast build tool and dev server
+- **Tailwind CSS** — Utility-first styling
+- **shadcn/ui** — Accessible UI components
+- **Lucide React** — Icon library
+- **React Router** — Client-side routing
+- **TanStack Query** — Data fetching and caching
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Backend
+- **PostgreSQL Database** — Stores check history
+- **Edge Functions** — Serverless functions for AI processing
+- **Storage Bucket** — Stores uploaded documents
+- **AI Gateway** — Powers plagiarism detection and humanization
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Project Structure
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```
+├── public/                  # Static files (favicon, robots.txt)
+├── src/
+│   ├── components/          # Reusable UI components
+│   │   ├── ComparisonModal.tsx
+│   │   ├── FAQSection.tsx
+│   │   ├── FeaturesSection.tsx
+│   │   ├── HeroSection.tsx
+│   │   ├── HistorySidebar.tsx
+│   │   ├── HowItWorksSection.tsx
+│   │   └── NavLink.tsx
+│   ├── hooks/               # Custom React hooks
+│   ├── integrations/        # Supabase client and types
+│   ├── lib/                 # Utility functions
+│   ├── pages/               # Page components
+│   │   ├── Index.tsx        # Main app page
+│   │   └── NotFound.tsx     # 404 page
+│   ├── App.tsx              # App root with routes
+│   ├── App.css              # App-specific styles
+│   ├── index.css            # Global styles and Tailwind
+│   └── main.tsx             # App entry point
+├── supabase/
+│   ├── config.toml          # Edge function configuration
+│   └── functions/           # Serverless backend functions
+│       ├── check-plagiarism/
+│       ├── humanize-text/
+│       └── parse-document/
+├── index.html               # HTML entry point
+├── package.json             # Dependencies and scripts
+├── tailwind.config.ts       # Tailwind configuration
+├── tsconfig.json            # TypeScript configuration
+└── vite.config.ts           # Vite configuration
+```
+
+---
+
+## How It Works
+
+### 1. User Enters Text
+The user pastes text into the input area or uploads a document. The frontend validates that the text is at least 50 characters long.
+
+### 2. Plagiarism Check
+The text is sent to the `check-plagiarism` Edge Function, which:
+- Uses an AI model to analyze the text
+- Compares it against known patterns and sources
+- Returns a plagiarism percentage and a list of matches
+
+### 3. Results Display
+The frontend displays:
+- Overall plagiarism score
+- Status badge (Original / Plagiarism Detected)
+- Progress bar
+- Detailed list of matched sources
+- Option to compare or download the report
+
+### 4. Humanization
+If the text is plagiarized, the user can click **Humanize Text**. This sends the text to the `humanize-text` Edge Function, which rewrites it using AI to improve originality.
+
+### 5. History Saving
+Every check is saved to a PostgreSQL database via Supabase, allowing users to reload previous results from the sidebar.
+
+---
+
+## Edge Functions
+
+### `check-plagiarism`
+Receives text input, runs AI-based plagiarism analysis, and returns:
+- `plagiarismPercentage` — percentage of text that may be plagiarized
+- `matches` — array of matched sources and text
+- `isOriginal` — boolean result
+
+### `humanize-text`
+Receives text and an originality level, then rewrites the content to reduce plagiarism while preserving meaning.
+
+### `parse-document`
+Downloads uploaded files from storage, extracts text from PDF, DOCX, or TXT files, and returns the plain text.
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) v18 or higher
+- npm or any other package manager
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Start the development server:
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+4. Open your browser and visit:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```
+http://localhost:8080
+```
 
-**Use GitHub Codespaces**
+### Build for Production
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```bash
+npm run build
+```
 
-## What technologies are used for this project?
+The optimized build will be generated in the `dist/` folder.
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Environment Variables
 
-## How can I deploy this project?
+This project uses  Cloud for backend services. The required environment variables are automatically injected at build time.
 
-Simply open [Lovable](https://lovable.dev/projects/bb6e3302-f60f-46f3-a147-f31f523ac7ed) and click on Share -> Publish.
+Do not expose service-role keys or sensitive credentials in client-side code.
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## Usage Guide
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+1. **Open the app** in your browser.
+2. **Paste text** into the input box or **upload a document**.
+3. Click **Check Plagiarism** to analyze the content.
+4. Review the **plagiarism score** and matched sources.
+5. Click **Compare** to view side-by-side comparison.
+6. Click **Download Report** to save the result.
+7. If needed, click **Humanize Text** to rewrite the content.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
+
+## Future Enhancements
+
+- PDF report generation
+- User authentication and saved sessions
+- Multi-language support
+- Citation checker and generator
+- Batch document processing
+- Analytics dashboard
+- Grammar and readability scoring
+
+---
+
+## License
+
+This project is built for educational and demonstration purposes. You are free to modify and extend it as needed.
+
+---
+
